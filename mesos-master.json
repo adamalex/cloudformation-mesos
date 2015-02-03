@@ -12,7 +12,7 @@
     "InstanceType" : {
       "Description" : "EC2 instance type",
       "Type" : "String",
-      "Default" : "m1.small",
+      "Default" : "m3.medium",
       "AllowedValues" : ["m1.small","m1.medium","m1.large","m1.xlarge","m3.medium","m3.large","m3.xlarge","m3.2xlarge","c1.medium","c1.xlarge","c3.large","c3.xlarge","c3.2xlarge","c3.4xlarge","c3.8xlarge","cc2.8xlarge","m2.xlarge","m2.2xlarge","m2.4xlarge","r3.large","r3.xlarge","r3.2xlarge","r3.4xlarge","r3.8xlarge","cr1.8xlarge","hi1.4xlarge","hs1.8xlarge","i2.xlarge","i2.2xlarge","i2.4xlarge","i2.8xlarge","t1.micro","cg1.4xlarge","g2.2xlarge"],
       "ConstraintDescription" : "must be a valid EC2 instance type."
     },
@@ -166,7 +166,7 @@
                 "content" : { "Fn::Join" : ["\n", [
                   "#!/bin/bash -e",
                   "echo \"zk://`/usr/local/bin/zk-list-nodes`/{{mesos_cluster_id}}\" > /etc/sv/mesos-master/env/MESOS_ZK",
-                  "echo \"`/usr/bin/ec2metadata --public-hostname`\" > /etc/sv/mesos-master/env/MESOS_HOSTNAME",
+                  "echo \"`/usr/bin/ec2metadata --local-ipv4`\" > /etc/sv/mesos-master/env/MESOS_HOSTNAME",
                   "echo \"{{mesos_quorum}}\" > /etc/sv/mesos-master/env/MESOS_QUORUM"
                 ]]},
                 "context" : {
@@ -211,7 +211,6 @@
         "KeyName" : { "Ref" : "KeyName" },
         "ImageId" : { "Ref" : "InstanceAmi" },
         "SecurityGroups" : [ { "Ref" : "SecurityGroup" }, { "Ref" : "ZkClientSecurityGroup" }, { "Ref" : "AdminSecurityGroup" } ],
-        "AssociatePublicIpAddress" : "true",
         "InstanceType" : { "Ref" : "InstanceType" },
         "UserData"       : { "Fn::Base64" : { "Fn::Join" : ["", [
           "#!/bin/bash -ex\n",
@@ -261,7 +260,7 @@
           "     --zk zk://`zk-list-nodes`/", { "Ref": "ClusterId" }, "_marathon",
           "     --event_subscriber http_callback",
           "     --ha",
-          "     --hostname `ec2metadata --public-hostname`'\n",
+          "     --hostname `ec2metadata --local-ipv4`'\n",
 
           "runit-service enable marathon\n",
 
