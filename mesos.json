@@ -122,7 +122,7 @@
   "Mappings" : {
     "RegionMap" : {
       "us-east-1" : {
-        "AMI" : "ami-78763510"
+        "AMI" : "ami-aa6220c2"
       }
     }
   },

@@ -155,6 +155,7 @@
               "/usr/local/bin/configure-mesos-slave" : {
                 "content" : { "Fn::Join" : ["\n", [
                   "#!/bin/bash -e",
+                  "echo \"$(ec2metadata --local-ipv4) $(hostname)\" >> /etc/hosts",
                   "echo \"zk://`/usr/local/bin/zk-list-nodes`/{{mesos_cluster_id}}\" > /etc/sv/mesos-slave/env/MESOS_MASTER",
                   "echo \"`/usr/bin/ec2metadata --local-ipv4`\" > /etc/sv/mesos-slave/env/MESOS_HOSTNAME",
                   "echo \"{{executor_registration_timeout}}\" > /etc/sv/mesos-slave/env/MESOS_EXECUTOR_REGISTRATION_TIMEOUT",
