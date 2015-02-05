@@ -260,6 +260,7 @@
           "     --master zk://`zk-list-nodes`/", { "Ref": "ClusterId" },
           "     --zk zk://`zk-list-nodes`/", { "Ref": "ClusterId" }, "_marathon",
           "     --event_subscriber http_callback",
+          "     --task_launch_timeout 300000",
           "     --ha",
           "     --hostname `ec2metadata --local-ipv4`'\n",
 
